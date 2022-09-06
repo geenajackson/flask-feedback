@@ -43,8 +43,22 @@ def show_register():
         
     return render_template("register.html", form=form)
 
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def login_user():
     form = LoginUserForm()
 
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+
+        #authenticate method returns a user or False
+        user = User.authenticate(username, password)
+
+        if user:
+            session["username"] = user.username
+            return redirect("/secret")
+
+        else:
+            form.username.errors("Incorrect username or password.")
+            
     return render_template("login.html", form=form)
