@@ -12,15 +12,15 @@
 </head>
 
 <body>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    <ul>
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
         {% for category, message in messages %}
-        <li class="{{ category }}">{{ message }}</li>
+        <div class="alert alert-{{ category }}">{{ message }}</div>
         {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
+        {% endif %}
+        {% endwith %}
+    </div>
     {% block content %}{% endblock %}
 </body>
 
