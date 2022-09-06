@@ -62,3 +62,7 @@ def login_user():
             form.username.errors = ["Incorrect username or password."]
 
     return render_template("login.html", form=form)
+
+@app.route("/secret")
+def reveal_secrets():
+    return render_template("secret.html")
