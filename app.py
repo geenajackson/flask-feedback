@@ -59,6 +59,6 @@ def login_user():
             return redirect("/secret")
 
         else:
-            form.username.errors("Incorrect username or password.")
-            
+            form.username.errors = ["Incorrect username or password."]
+
     return render_template("login.html", form=form)
