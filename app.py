@@ -45,6 +45,7 @@ def register_user():
             return render_template("register.html", form=form)
 
         session["username"] = new_user.username
+        flash("User created!", "success")
 
         return redirect("/secret")
         
@@ -63,6 +64,7 @@ def login_user():
 
         if user:
             session["username"] = user.username
+            flash("Successfully logged in!", "success")
             return redirect("/secret")
 
         else:
@@ -72,4 +74,10 @@ def login_user():
 
 @app.route("/secret")
 def reveal_secrets():
-    return render_template("secret.html")
+    """Reveal secrets only to users who are logged in."""
+    if "username" not in session:
+        flash("Please log in to view secrets.", "warning")
+        return redirect("/login")
+        
+    else:
+     return render_template("secret.html")
