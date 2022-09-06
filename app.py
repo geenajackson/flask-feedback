@@ -14,3 +14,8 @@ from flask_debugtoolbar import DebugToolbarExtension
 app.config['SECRET_KEY'] = "secret"
 app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False
 debug = DebugToolbarExtension(app)
+
+@app.route("/")
+def redirect_to_register():
+    """Redirects the User to /register"""
+    return redirect("/register")
