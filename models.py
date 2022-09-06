@@ -32,3 +32,17 @@ class User(db.Model):
 
         #return instance of user with a hashed password
         return cls(username=username, password=hashed_utf8, email=email, first_name=first_name, last_name=last_name)
+
+    @classmethod
+    def authenticate(clas, username, password):
+        """Validate user and password.
+        Returns user if True; else, return False"""
+
+        user = User.query.filter_by(username=username).first()
+
+        #check if user and hashed password match
+        if user and bcrypt.check_password_hash(user.password, password):
+            #return instance of user
+            return user
+        else:
+            return False
