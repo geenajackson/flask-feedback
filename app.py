@@ -18,6 +18,7 @@ app.config['SECRET_KEY'] = "secret"
 app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False
 debug = DebugToolbarExtension(app)
 
+
 @app.route("/")
 def redirect_to_register():
     """Redirects the User to /register"""
@@ -65,7 +66,7 @@ def login_user():
         if user:
             session["username"] = user.username
             flash("Successfully logged in!", "success")
-            return redirect("/secret")
+            return redirect(f"/users/{user.username}")
 
         else:
             form.username.errors = ["Incorrect username or password."]
@@ -76,11 +77,20 @@ def login_user():
 def reveal_secrets():
     """Reveal secrets only to users who are logged in."""
     if "username" not in session:
-        flash("Please log in to view secrets.", "warning")
+        flash("Please log in to view this page.", "warning")
         return redirect("/login")
 
-    else:
-     return render_template("secret.html")
+    return render_template("secret.html")
+
+@app.route("/users/<username>")
+def show_user(username):
+    if "username" not in session:
+        flash("Please log in to view this page.", "warning")
+        return redirect("/login")
+
+    user = User.query.get_or_404(username)
+    
+    return render_template("show_user.html", user=user)
 
 @app.route("/logout")
 def logout_user():
@@ -89,3 +99,5 @@ def logout_user():
     session.pop("username")
 
     return redirect("/login")
+
+
