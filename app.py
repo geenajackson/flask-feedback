@@ -1,7 +1,9 @@
 """Flask app for Feedback"""
+from sqlite3 import IntegrityError
 from flask import Flask, jsonify, request, redirect, render_template, flash, session
 from models import db, connect_db, User
 from forms import RegisterUserForm, LoginUserForm
+from sqlalchemy.exc import IntegrityError
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///feedback'
@@ -22,7 +24,7 @@ def redirect_to_register():
     return redirect("/register")
 
 @app.route("/register", methods=["GET", "POST"])
-def show_register():
+def register_user():
     """Shows form for registering user"""
     form = RegisterUserForm()
 
@@ -35,7 +37,12 @@ def show_register():
 
         new_user = User.register(username, password, email, first_name, last_name)
         db.session.add(new_user)
-        db.session.commit()
+        
+        try:
+            db.session.commit()
+        except IntegrityError:
+            form.username.errors = ["Username or email taken. Please try again."]
+            return render_template("register.html", form=form)
 
         session["username"] = new_user.username
 
