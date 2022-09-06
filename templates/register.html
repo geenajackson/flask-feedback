@@ -3,31 +3,29 @@
 {% block title %}Register a User{% endblock %}
 
 {% block content %}
-<h1>Register a User</h1>
 
-<form id="register-form" method="POST">
-    {{ form.hidden_tag() }}
-    <!--add type=hidden form fields -->
+<div class="container">
+    <h1 class="display-2">Register a User</h1>
+    <form id="register-form" method="POST">
+        {{ form.hidden_tag() }}
+        <!--add type=hidden form fields -->
 
-    {% for field in form
-    if field.widget.input_type != 'hidden' %}
+        {% for field in form
+        if field.widget.input_type != 'hidden' %}
 
-    <p>
-        {{ field.label }}
-        {{ field }}
+        <p>
+            {{ field.label }}
+            {{ field(class_="form-control") }}
 
-        {% for error in field.errors %}
-        {{ error }}
+            {% for error in field.errors %}
+            <span class="form-text text-danger">{{ error }}</span>
+            {% endfor %}
+        </p>
+
         {% endfor %}
-    </p>
 
-    {% endfor %}
-
-    <button class="btn btn-primary" type="submit">Submit</button>
-</form><br>
-
-<form action="/">
-    <button class="btn btn-secondary">Cancel</button>
-</form>
+        <button class="btn btn-primary" type="submit">Register</button>
+    </form>
+</div>
 
 {% endblock %}
