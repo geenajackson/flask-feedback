@@ -78,6 +78,14 @@ def reveal_secrets():
     if "username" not in session:
         flash("Please log in to view secrets.", "warning")
         return redirect("/login")
-        
+
     else:
      return render_template("secret.html")
+
+@app.route("/logout")
+def logout_user():
+    """Log out user and redirect to login page."""
+
+    session.pop("username")
+
+    return redirect("/login")
