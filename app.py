@@ -1,6 +1,7 @@
 """Flask app for Feedback"""
 from flask import Flask, jsonify, request, redirect, render_template, flash
 from models import db, connect_db
+from forms import RegisterUserForm
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///feedback'
@@ -19,3 +20,9 @@ debug = DebugToolbarExtension(app)
 def redirect_to_register():
     """Redirects the User to /register"""
     return redirect("/register")
+
+@app.route("/register", methods=["GET", "POST"])
+def show_register():
+    """Shows form for registering user"""
+    form = RegisterUserForm()
+    return render_template("register.html", form=form)
