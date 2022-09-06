@@ -1,6 +1,6 @@
 """Flask app for Feedback"""
-from flask import Flask, jsonify, request, redirect, render_template, flash
-from models import db, connect_db
+from flask import Flask, jsonify, request, redirect, render_template, flash, session
+from models import db, connect_db, User
 from forms import RegisterUserForm
 
 app = Flask(__name__)
@@ -25,4 +25,18 @@ def redirect_to_register():
 def show_register():
     """Shows form for registering user"""
     form = RegisterUserForm()
+
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+        email = form.email.data
+        first_name = form.first_name.data
+        last_name = form.last_name.data
+
+        new_user = User.register(username, password, email, first_name, last_name)
+        db.session.add(new_user)
+        db.session.commit()
+
+        session["username"] = new_user.username
+        
     return render_template("register.html", form=form)
