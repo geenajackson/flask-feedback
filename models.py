@@ -34,7 +34,7 @@ class User(db.Model):
         return cls(username=username, password=hashed_utf8, email=email, first_name=first_name, last_name=last_name)
 
     @classmethod
-    def authenticate(clas, username, password):
+    def authenticate(cls, username, password):
         """Validate user and password.
         Returns user if True; else, return False"""
 
