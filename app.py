@@ -47,7 +47,7 @@ def register_user():
         session["username"] = new_user.username
         flash("User created!", "success")
 
-        return redirect("/secret")
+        return redirect(f"/users/{new_user.username}")
         
     return render_template("register.html", form=form)
 
