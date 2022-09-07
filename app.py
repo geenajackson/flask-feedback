@@ -1,7 +1,7 @@
 """Flask app for Feedback"""
 from sqlite3 import IntegrityError
 from flask import Flask, jsonify, request, redirect, render_template, flash, session
-from models import db, connect_db, User
+from models import db, connect_db, User, Feedback
 from forms import RegisterUserForm, LoginUserForm
 from sqlalchemy.exc import IntegrityError
 
@@ -17,7 +17,6 @@ from flask_debugtoolbar import DebugToolbarExtension
 app.config['SECRET_KEY'] = "secret"
 app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False
 debug = DebugToolbarExtension(app)
-
 
 @app.route("/")
 def redirect_to_register():
@@ -89,8 +88,9 @@ def show_user(username):
         return redirect("/login")
 
     user = User.query.get_or_404(username)
+    feedback = user.user_feedback
     
-    return render_template("show_user.html", user=user)
+    return render_template("show_user.html", user=user, feedback=feedback)
 
 @app.route("/logout")
 def logout_user():
