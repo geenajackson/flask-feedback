@@ -31,14 +31,14 @@
     <div class="d-flex flex-row">
         {% if session["username"] == user.username %}
         <form action="/users/{{user.username}}/feedback/add">
-            <button class="btn btn-primary">Add Feedback</button>
+            <button class="btn btn-primary m-1"><i class="fa-regular fa-comment"></i> Add Feedback</button>
         </form>
         <form action="/users/{{user.username}}/delete" method="POST">
-            <button class="btn btn-danger">Delete User</button>
+            <button class="btn btn-danger m-1"><i class="fa-solid fa-user-xmark"></i> Delete User</button>
         </form>
         {% endif %}
         <form action="/secret">
-            <button class="btn btn-secondary">Secrets</button>
+            <button class="btn btn-secondary m-1"><i class="fa-solid fa-user-secret"></i> Secrets</button>
         </form>
     </div>
 
