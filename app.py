@@ -105,6 +105,14 @@ def delete_user(username):
     flash("User deleted.", "danger")
     return redirect("/register")
 
+@app.route("/users/<username>/feedback/add")
+def add_feedback(username):
+    user = User.query.get_or_404(username)
+
+    if session["username"] != user.username:
+        flash("You are not authorized to view this page.", "warning")
+        redirect("/login")
+
 
 @app.route("/logout")
 def logout_user():
