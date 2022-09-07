@@ -92,6 +92,20 @@ def show_user(username):
     
     return render_template("show_user.html", user=user, feedback=feedback)
 
+@app.route("/users/<username>/delete", methods=["POST"])
+def delete_user(username):
+    user = User.query.get_or_404(username)
+
+    if session["username"] != user.username:
+        flash("You are not authorized to view this page.", "warning")
+        redirect("/login")
+    
+    db.session.delete(user)
+    db.session.commit()
+    flash("User deleted.", "danger")
+    return redirect("/register")
+
+
 @app.route("/logout")
 def logout_user():
     """Log out user and redirect to login page."""
