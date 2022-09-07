@@ -15,19 +15,31 @@
     <h3 class="display-4">Feedback:</h3>
     <div>
         {% for item in feedback %}
-        <div class="container">
-            <h4>{{item.title}}</h4>
-            <p>{{item.content}}</p>
-            {% if session["username"] == item.username %}
-            <a class="btn btn-success btn-sm" href="/feedback/{{item.id}}/update">Edit</a>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">{{item.title}}</h4>
+                <p class="card-text">{{item.content}}</p>
+                {% if session["username"] == item.username %}
+                <a class="card-link" href="/feedback/{{item.id}}/update"><i
+                        class="fa-regular fa-pen-to-square"></i>Edit</a>
+            </div>
         </div>
         {% endif %}
         {% endfor %}
     </div>
+    <br>
+    <div class="d-flex flex-row">
+        {% if session["username"] == user.username %}
+        <form action="/users/{{user.username}}/feedback/add">
+            <button class="btn btn-primary">Add Feedback</button>
+        </form>
+        <form action="/users/{{user.username}}/delete" method="POST">
+            <button class="btn btn-danger">Delete User</button>
+        </form>
+        {% endif %}
+        <form action="/secret">
+            <button class="btn btn-secondary">Secrets</button>
+        </form>
+    </div>
 
-    <form action="/secret">
-        <button class="btn btn-primary">Secrets</button>
-    </form>
-</div>
-
-{% endblock %}
+    {% endblock %}
