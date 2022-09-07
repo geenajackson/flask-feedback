@@ -5,13 +5,25 @@
 {% block content %}
 
 <div class="container">
-    <h1 class="display-3">{{user.username}}</h1>
+    <h1 class="display-2">{{user.username}}</h1>
     <ul>
         <li>Username: {{user.username}}</li>
         <li>Name: {{user.first_name}} {{user.last_name}}</li>
         <li>Email: {{user.email}}</li>
 
     </ul>
+    <h3 class="display-4">Feedback:</h3>
+    <div>
+        {% for item in feedback %}
+        <div class="container">
+            <h4>{{item.title}}</h4>
+            <p>{{item.content}}</p>
+            {% if session["username"] == item.username %}
+            <a class="btn btn-success btn-sm" href="/feedback/{{item.id}}/update">Edit</a>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
 
     <form action="/secret">
         <button class="btn btn-primary">Secrets</button>
