@@ -162,7 +162,24 @@ def update_feedback(id):
         flash("Feedback updated.", "success")
         return redirect(f"/users/{feedback.username}")
 
-    return render_template("edit_feedback.html", form=form)
+    return render_template("edit_feedback.html", form=form, feedback=feedback)
+
+@app.route("/feedback/<int:id>/delete", methods=["POST"])
+def delete_feedback(id):
+    if "username" not in session:
+        flash("Please log in to view this page.", "warning")
+        return redirect("/login")
+    
+    feedback = Feedback.query.get_or_404(id)
+
+    if session["username"] != feedback.username:
+        flash("You are not authorized to view this page.", "warning")
+        return redirect(f"/users/{session['username']}")
+    
+    db.session.delete(feedback)
+    db.session.commit()
+    flash("Feedback deleted.", "danger")
+    return redirect(f"/users/{feedback.username}")
 
 @app.route("/logout")
 def logout_user():
