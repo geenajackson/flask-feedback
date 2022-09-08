@@ -1,6 +1,6 @@
 """Flask app for Feedback"""
 from sqlite3 import IntegrityError
-from flask import Flask, request, redirect, render_template, flash, session
+from flask import Flask, redirect, render_template, flash, session
 from models import db, connect_db, User, Feedback
 from forms import RegisterUserForm, LoginUserForm, FeedbackForm, edit_feedback_form
 from sqlalchemy.exc import IntegrityError
