@@ -2,7 +2,7 @@
 from sqlite3 import IntegrityError
 from flask import Flask, request, redirect, render_template, flash, session
 from models import db, connect_db, User, Feedback
-from forms import RegisterUserForm, LoginUserForm, FeedbackForm
+from forms import RegisterUserForm, LoginUserForm, FeedbackForm, edit_feedback_form
 from sqlalchemy.exc import IntegrityError
 
 app = Flask(__name__)
@@ -94,6 +94,10 @@ def show_user(username):
 
 @app.route("/users/<username>/delete", methods=["POST"])
 def delete_user(username):
+    if "username" not in session:
+        flash("Please log in to view this page.", "warning")
+        return redirect("/login")
+
     user = User.query.get_or_404(username)
 
     if session["username"] != user.username:
@@ -107,12 +111,16 @@ def delete_user(username):
 
 @app.route("/users/<username>/feedback/add", methods=["GET", "POST"])
 def add_feedback(username):
+    if "username" not in session:
+        flash("Please log in to view this page.", "warning")
+        return redirect("/login")
+
     user = User.query.get_or_404(username)
     form = FeedbackForm()
 
     if session["username"] != user.username:
         flash("You are not authorized to view this page.", "warning")
-        return redirect(f"/users/{username}")
+        return redirect(f"/users/{session['username']}")
     
     if form.validate_on_submit():
         title = form.title.data
@@ -128,7 +136,33 @@ def add_feedback(username):
     
     return render_template("add_feedback.html", form=form, user=user)
 
+@app.route("/feedback/<int:id>/update", methods=["GET", "POST"])
+def update_feedback(id):
+    if "username" not in session:
+        flash("Please log in to view this page.", "warning")
+        return redirect("/login")
 
+    feedback = Feedback.query.get_or_404(id)
+    form = edit_feedback_form(feedback)
+
+    if session["username"] != feedback.username:
+        flash("You are not authorized to view this page.", "warning")
+        return redirect(f"/users/{session['username']}")
+
+    if form.validate_on_submit():
+        title = form.title.data
+        content = form.content.data
+
+        feedback.title = title
+        feedback.content = content
+
+        db.session.add(feedback)
+        db.session.commit()
+
+        flash("Feedback updated.", "success")
+        return redirect(f"/users/{feedback.username}")
+
+    return render_template("edit_feedback.html", form=form)
 
 @app.route("/logout")
 def logout_user():
