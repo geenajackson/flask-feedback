@@ -26,6 +26,9 @@ def redirect_to_register():
 @app.route("/register", methods=["GET", "POST"])
 def register_user():
     """Shows form for registering user"""
+    if "username" in session:
+        return redirect(f"/users/{session['username']}")
+
     form = RegisterUserForm()
 
     if form.validate_on_submit():
@@ -53,6 +56,10 @@ def register_user():
 
 @app.route("/login", methods=["GET", "POST"])
 def login_user():
+    """Shows form for logging in a user"""
+    if "username" in session:
+        return redirect(f"/users/{session['username']}")
+
     form = LoginUserForm()
 
     if form.validate_on_submit():
@@ -83,6 +90,7 @@ def reveal_secrets():
 
 @app.route("/users/<username>")
 def show_user(username):
+    """Display user info and feedback"""
     if "username" not in session:
         flash("Please log in to view this page.", "warning")
         return redirect("/login")
@@ -94,6 +102,7 @@ def show_user(username):
 
 @app.route("/users/<username>/delete", methods=["POST"])
 def delete_user(username):
+    """Delete user if session user matches."""
     if "username" not in session:
         flash("Please log in to view this page.", "warning")
         return redirect("/login")
@@ -111,6 +120,7 @@ def delete_user(username):
 
 @app.route("/users/<username>/feedback/add", methods=["GET", "POST"])
 def add_feedback(username):
+    """Add feedback for current session user"""
     if "username" not in session:
         flash("Please log in to view this page.", "warning")
         return redirect("/login")
@@ -138,6 +148,7 @@ def add_feedback(username):
 
 @app.route("/feedback/<int:id>/update", methods=["GET", "POST"])
 def update_feedback(id):
+    """Update feedback if session user matches feedback user"""
     if "username" not in session:
         flash("Please log in to view this page.", "warning")
         return redirect("/login")
@@ -166,6 +177,7 @@ def update_feedback(id):
 
 @app.route("/feedback/<int:id>/delete", methods=["POST"])
 def delete_feedback(id):
+    """Delete feedback if session user matches feedback user"""
     if "username" not in session:
         flash("Please log in to view this page.", "warning")
         return redirect("/login")
