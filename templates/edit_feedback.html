@@ -25,9 +25,11 @@
 
         {% endfor %}
 
-        <button class="btn btn-primary" type="submit">Update Feedback</button>
+        <button class="btn btn-primary" type="submit"><i class="fa-regular fa-pen-to-square"></i> Update
+            Feedback</button>
     </form><br>
-    <a class="btn btn-secondary" href="/users/{{session['username']}}">Return to User Page</a>
+    <a class="btn btn-secondary" href="/users/{{session['username']}}"><i class="fa-solid fa-arrow-rotate-left"></i>
+        Return to User Page</a>
 </div>
 
 {% endblock %}
