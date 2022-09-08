@@ -23,3 +23,13 @@ class FeedbackForm(FlaskForm):
 
     title = StringField("Title", validators=[InputRequired(), Length(max=100)])
     content = TextAreaField("Content", validators=[InputRequired()])
+
+#this function is created to allow default values to come from the feedback parameter
+def edit_feedback_form(feedback):
+    """Function for editing feedback"""
+    class EditFeedbackForm(FlaskForm):
+        """Form for editing feedback."""
+        title = StringField("Title", default=feedback.title, validators=[InputRequired(), Length(max=100)])
+        content = TextAreaField("Content", default=feedback.content, validators=[InputRequired()])
+    
+    return EditFeedbackForm()
