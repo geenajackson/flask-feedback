@@ -1,8 +1,8 @@
 """Flask app for Feedback"""
 from sqlite3 import IntegrityError
-from flask import Flask, jsonify, request, redirect, render_template, flash, session
+from flask import Flask, request, redirect, render_template, flash, session
 from models import db, connect_db, User, Feedback
-from forms import RegisterUserForm, LoginUserForm
+from forms import RegisterUserForm, LoginUserForm, FeedbackForm
 from sqlalchemy.exc import IntegrityError
 
 app = Flask(__name__)
@@ -105,13 +105,29 @@ def delete_user(username):
     flash("User deleted.", "danger")
     return redirect("/register")
 
-@app.route("/users/<username>/feedback/add")
+@app.route("/users/<username>/feedback/add", methods=["GET", "POST"])
 def add_feedback(username):
     user = User.query.get_or_404(username)
+    form = FeedbackForm()
 
     if session["username"] != user.username:
         flash("You are not authorized to view this page.", "warning")
-        redirect("/login")
+        return redirect(f"/users/{username}")
+    
+    if form.validate_on_submit():
+        title = form.title.data
+        content = form.content.data
+
+        new_feedback = Feedback(title=title, content=content, username=username)
+        db.session.add(new_feedback)
+        db.session.commit()
+        
+        flash("Feedback created!", "success")
+
+        return redirect(f"/users/{username}")
+    
+    return render_template("add_feedback.html", form=form, user=user)
+
 
 
 @app.route("/logout")
