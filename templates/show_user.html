@@ -36,10 +36,10 @@
         <form action="/users/{{user.username}}/delete" method="POST">
             <button class="btn btn-danger m-1"><i class="fa-solid fa-user-xmark"></i> Delete User</button>
         </form>
-        {% endif %}
-        <form action="/secret">
-            <button class="btn btn-secondary m-1"><i class="fa-solid fa-user-secret"></i> Secrets</button>
+        <form action="/logout">
+            <button class="btn btn-secondary m-1"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
         </form>
+        {% endif %}
     </div>
 
     {% endblock %}
